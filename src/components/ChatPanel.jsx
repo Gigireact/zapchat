@@ -53,7 +53,7 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
 
 
   return (
-  <div className="flex flex-1 flex-col min-h-0 overflow-hidden bg-bg">
+  <div className="flex flex-1 flex-col h-full overflow-hidden bg-bg">
 
     {/* Header */}
     <div className="flex items-center gap-3 px-5 py-[14px] border-b border-border bg-bg2 shrink-0">
@@ -238,7 +238,7 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
     </div>
 
     {/* Input */}
-    <div className="px-4 py-[14px] border-t border-border bg-bg2 flex items-end gap-[10px] shrink-0">
+    <div className="sticky bottom-0 z-20 px-4 py-[14px] border-t border-border bg-bg2 flex items-end gap-[10px] shrink-0">
 
       <div className="flex-1 flex items-center gap-2 rounded-xl border border-border bg-bg3 px-[14px] py-2 transition focus-within:border-accent">
 
