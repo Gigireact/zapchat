@@ -15,10 +15,10 @@ A real-time-style chat app built with React.
 npm install
 
 # 2. Start the development server
-npm start
+npm run dev
 ```
 
-The app opens at **http://localhost:3000**
+The app opens at **http://localhost:5173**
 
 ---
 
