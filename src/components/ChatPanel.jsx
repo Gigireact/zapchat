@@ -53,7 +53,7 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
 
 
   return (
-  <div className="flex flex-1 flex-col h-screen overflow-hidden bg-bg">
+  <div className="flex flex-1 flex-col min-h-0 overflow-hidden bg-bg">
 
     {/* Header */}
     <div className="flex items-center gap-3 px-5 py-[14px] border-b border-border bg-bg2 shrink-0">
@@ -103,7 +103,7 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
     </div>
 
     {/* Messages */}
-    <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-[2px]">
+    <div className="flex-1 min-h-0 overflow-y-auto px-5 py-5 flex flex-col gap-[2px]">
 
       {groups.map((g, i) => {
 
