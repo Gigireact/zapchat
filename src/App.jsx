@@ -60,20 +60,33 @@ export default function App() {
     }));
 
     // Simulate reply (some contacts don't always reply)
-    if (activeContact.id % 3 !== 0 || Math.random() > 0.3) {
-      const delay = 2000 + Math.random() * 3000;
-      setTimeout(() => setTyping(true), 800);
-      setTimeout(() => {
-        setTyping(false);
-        const bank = REPLY_BANKS[activeContact.id % REPLY_BANKS.length];
-        const reply = bank[Math.floor(Math.random() * bank.length)];
-        const replyMsg = { id: Date.now(), from: activeContact.id, text: reply, time: new Date(), read: true };
+    const online = isOnline(activeContact.id);
+
+    if (!online) return;
+
+    const delay = 2000 + Math.random() * 3000;
+
+    setTimeout(() => setTyping(true), 800);
+
+    setTimeout(() => {
+      setTyping(false);
+
+      const bank = REPLY_BANKS[activeContact.id % REPLY_BANKS.length];
+      const reply = bank[Math.floor(Math.random() * bank.length)];
+
+        const replyMsg = {
+            id: Date.now(),
+            from: activeContact.id,
+            text: reply,
+            time: new Date(),
+            read: true,
+        };
+
         setMessages(prev => ({
-          ...prev,
-          [k]: [...(prev[k] || []), replyMsg],
+            ...prev,
+            [k]: [...(prev[k] || []), replyMsg],
         }));
-      }, delay);
-    }
+    }, delay);
   }
 
   if (!currentUser) {

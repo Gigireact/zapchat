@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { colorFor, initials, isOnline, REPLY_BANKS } from '../data';
-// import styles from './ChatPanel.module.css';
+import EmojiPicker from "emoji-picker-react";
+import { BsEmojiSmile } from "react-icons/bs";
 
 export default function ChatPanel({ currentUser, contact, messages, onSendMessage, isTyping, onBack }) {
   const [text, setText] = useState('');
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
-  const EMOJIS = ['😊', '😂', '❤️', '👍', '🔥', '✅', '🎉', '😎', '🤔', '💡', '🙏', '👏'];
-  const emojiIdx = useRef(0);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -34,10 +34,10 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
     e.target.style.height = Math.min(e.target.scrollHeight, 100) + 'px';
   }
 
-  function insertEmoji() {
-    setText(t => t + EMOJIS[emojiIdx.current++ % EMOJIS.length]);
-    inputRef.current?.focus();
-  }
+  function onEmojiClick(emojiData) {
+  setText(prev => prev + emojiData.emoji);
+  inputRef.current?.focus();
+}
 
   // Group messages by date
   const groups = [];
@@ -242,12 +242,25 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
 
       <div className="flex-1 flex items-center gap-2 rounded-xl border border-border bg-bg3 px-[14px] py-2 transition focus-within:border-accent">
 
-        <button
-          onClick={insertEmoji}
-          className="shrink-0 text-lg text-text3 hover:text-accent transition"
-        >
-          😊
-        </button>
+        <div className="relative">
+
+          <button
+            onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+            className="text-xl text-text3 mt-2 hover:text-accent transition"
+          >
+            <BsEmojiSmile />
+          </button>
+
+          {showEmojiPicker && (
+            <div className="absolute bottom-12 left-0 z-50">
+              <EmojiPicker
+                onEmojiClick={onEmojiClick}
+                theme="dark"
+              />
+            </div>
+          )}
+
+        </div>
 
         <textarea
           ref={inputRef}
