@@ -10,32 +10,41 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [activeContact, setActiveContact] = useState(null);
   const [typing, setTyping] = useState(false);
+  const [showChat, setShowChat] = useState(false);  
 
   function handleLogin(user) {
     setCurrentUser(user);
     setActiveContact(null);
+    setShowChat(false);
   }
 
   function handleRegister(newUser) {
     setUsers(prev => [...prev, newUser]);
     setCurrentUser(newUser);
     setActiveContact(null);
+    setShowChat(false);
   }
-
   function handleLogout() {
     setCurrentUser(null);
     setActiveContact(null);
+    setShowChat(false);
   }
 
   function handleSelectContact(contact) {
     setActiveContact(contact);
-    // Mark messages from this contact as read
+    setShowChat(true);
+
     const k = msgKey(currentUser.id, contact.id);
+
     setMessages(prev => {
       const updated = { ...prev };
+
       updated[k] = (updated[k] || []).map(m =>
-        m.from === contact.id ? { ...m, read: true } : m
+        m.from === contact.id
+          ? { ...m, read: true }
+          : m
       );
+
       return updated;
     });
   }
@@ -81,8 +90,17 @@ export default function App() {
     ? messages[msgKey(currentUser.id, activeContact.id)] || []
     : [];
 
-  return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+ return (
+  <div className="flex h-screen overflow-hidden">
+
+    {/* Sidebar */}
+
+    <div
+      className={`
+        ${showChat ? "hidden" : "flex"}
+        md:flex
+      `}
+    >
       <Sidebar
         currentUser={currentUser}
         users={users}
@@ -91,26 +109,43 @@ export default function App() {
         onSelectContact={handleSelectContact}
         onLogout={handleLogout}
       />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'var(--bg)', overflow: 'hidden' }}>
-        {!activeContact ? (
-          <div style={{
-            flex: 1, display: 'flex', flexDirection: 'column',
-            alignItems: 'center', justifyContent: 'center',
-            color: 'var(--text3)', gap: 12,
-          }}>
-            <div style={{ fontSize: 48, opacity: 0.4 }}>💬</div>
-            <p style={{ fontSize: 14 }}>Select a conversation to start chatting</p>
-          </div>
-        ) : (
-          <ChatPanel
-            currentUser={currentUser}
-            contact={activeContact}
-            messages={chatMessages}
-            onSendMessage={handleSendMessage}
-            isTyping={typing}
-          />
-        )}
-      </div>
     </div>
-  );
+
+    {/* Chat */}
+
+    <div
+      className={`
+        flex-1
+        flex
+        flex-col
+        overflow-hidden
+        bg-bg
+        ${showChat ? "flex" : "hidden"}
+        md:flex
+      `}
+    >
+      {!activeContact ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-text3 gap-3">
+          <div className="text-5xl opacity-40">
+            💬
+          </div>
+
+          <p className="text-sm">
+            Select a conversation to start chatting
+          </p>
+        </div>
+      ) : (
+        <ChatPanel
+          currentUser={currentUser}
+          contact={activeContact}
+          messages={chatMessages}
+          onSendMessage={handleSendMessage}
+          isTyping={typing}
+          onBack={() => setShowChat(false)}
+        />
+      )}
+    </div>
+
+  </div>
+);
 }

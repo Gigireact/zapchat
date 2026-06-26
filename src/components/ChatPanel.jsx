@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { colorFor, initials, isOnline, REPLY_BANKS } from '../data';
 // import styles from './ChatPanel.module.css';
 
-export default function ChatPanel({ currentUser, contact, messages, onSendMessage, isTyping }) {
+export default function ChatPanel({ currentUser, contact, messages, onSendMessage, isTyping, onBack }) {
   const [text, setText] = useState('');
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
@@ -57,6 +57,14 @@ export default function ChatPanel({ currentUser, contact, messages, onSendMessag
 
     {/* Header */}
     <div className="flex items-center gap-3 px-5 py-[14px] border-b border-border bg-bg2 shrink-0">
+
+       {/* Mobile Back Button */}
+        <button
+          onClick={onBack}
+          className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-bg3 transition"
+        >
+          ←
+        </button>
 
       <div
         className="w-9 h-9 rounded-full flex items-center justify-center text-[13px] font-semibold shrink-0"
